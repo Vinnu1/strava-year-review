@@ -1,3 +1,3 @@
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 
-secrets = dotenv_values()
+load_dotenv(override=True)
