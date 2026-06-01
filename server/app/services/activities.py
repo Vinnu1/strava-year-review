@@ -12,9 +12,6 @@ headers= {
     'Authorization': f'Bearer {access_token}'
 }
 
-# If user doesn't provide scope, display error and ask to re-authorize
-# Authorize URL - https://www.strava.com/oauth/authorize?client_id=CLIENT_ID&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=read,activity:read,activity:read_all
- 
 # Create request to get activities
 def get_activities():
     request = requests.get(f"{base_url}/athlete/activities", params=body, headers=headers)
