@@ -1,10 +1,19 @@
 import { useState } from "react";
-import LoginButton from "./components/LoginButton";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import LoginPage from "./components/login/LoginPage";
+import YearReview from "./components/YearReview";
 
 function App() {
-  const [accessToken, setAccessToken] = useState("");
-
-  return <>{accessToken !== "" ? <h1>Logged In</h1> : <LoginButton />}</>;
+  return (
+    <BrowserRouter>
+      {/* {accessToken !== "" ? <h1>Logged In</h1> : <LoginPage />} */}
+      <Routes>
+        <Route path="/" element={<YearReview />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

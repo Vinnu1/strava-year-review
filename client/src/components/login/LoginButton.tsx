@@ -3,10 +3,11 @@ const stravaAuthUri = "https://www.strava.com/oauth/authorize";
 
 export default function LoginButton() {
   const handleClick = () => {
+    // redirect to Strava Oauth
     const params = new URLSearchParams({
       client_id: import.meta.env.VITE_CLIENT_ID,
       response_type: "code",
-      redirect_uri: "http://localhost:3000/auth",
+      redirect_uri: "http://localhost:3000/login",
       approval_prompt: "force",
       scope: "read,activity:read,activity:read_all",
     });
