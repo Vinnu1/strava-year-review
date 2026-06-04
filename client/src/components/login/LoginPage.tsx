@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import LoginButton from "./LoginButton";
 
-async function getAccessToken() {
-  const request = await fetch("/path-to-fastapi", {
+async function getAccessToken(code: string) {
+  const request = await fetch("http://localhost:8000/authorize", {
     method: "POST",
+    body: JSON.stringify({ code: code }),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
   const accessToken = await request.json();
   console.log(accessToken);
@@ -13,8 +17,9 @@ async function getAccessToken() {
 export default function LoginPage() {
   const [authCode, setAuthCode] = useSearchParams();
   useEffect(() => {
-    if (authCode.get("code") !== null) {
-      getAccessToken();
+    const code = authCode.get("code");
+    if (code !== null) {
+      getAccessToken(code);
     }
   }, []);
 

@@ -13,3 +13,7 @@ import requests, os
 client_id = os.environ["CLIENT_ID"]
 client_secret = os.environ["CLIENT_SECRET"]
 
+# Send request to strava, get and send back access token 
+def get_access_token(auth_code):
+    return auth_code
+
