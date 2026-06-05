@@ -13,7 +13,22 @@ import requests, os
 client_id = os.environ["CLIENT_ID"]
 client_secret = os.environ["CLIENT_SECRET"]
 
+oauth_url = "https://www.strava.com/oauth/token"
+
+
 # Send request to strava, get and send back access token 
 def get_access_token(auth_code):
-    return auth_code
+    # maybe we can define body outside and just add the code field
+    body = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "code": auth_code,
+        "grant_type": "authorization_code"
+        
+	}
+    request = requests.post(oauth_url,json=body)
+    response = request.json()
+    token = response.get('access_token')
+    print(token)
+    return token
 
