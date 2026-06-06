@@ -1,4 +1,6 @@
-import requests, os
+import httpx, os
+from fastapi import HTTPException
+from schemas.tokens import AuthCode
 
 # If user doesn't provide scope, display error and ask to re-authorize
 # Get access token and return
@@ -17,18 +19,26 @@ oauth_url = "https://www.strava.com/oauth/token"
 
 
 # Send request to strava, get and send back access token 
-def get_access_token(auth_code):
+async def get_access_token(auth_code: AuthCode) -> str:
     # maybe we can define body outside and just add the code field
     body = {
         "client_id": client_id,
         "client_secret": client_secret,
         "code": auth_code,
         "grant_type": "authorization_code"
-        
 	}
-    request = requests.post(oauth_url,json=body)
-    response = request.json()
-    token = response.get('access_token')
-    print(token)
-    return token
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(oauth_url,json=body, timeout=10)
+            response.raise_for_status()
+            token = response.json().get('access_token')
+        except httpx.TimeoutException:
+            raise HTTPException(status_code=504, detail="Strava API request timed out")
+        except httpx.HTTPStatusError:
+            if(response.status_code == 400):
+                raise HTTPException(status_code=400, detail="Strava API Bad request")
+        if token is None:
+            raise HTTPException(status_code=502, detail="Strava API didn't provide access_token")
+        print(token)
+        return token
 
