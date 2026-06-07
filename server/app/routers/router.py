@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Response
 from schemas.tokens import AuthCode, Token
 from services.authorize import get_access_token
+from services.activities import get_activities
 
 router = APIRouter()
 @router.get("/") #, response_model=ActivityData
@@ -15,3 +16,8 @@ async def get_access(auth_code: AuthCode): #, response: Response
     # response.status_code = 201
     access_token = await get_access_token(auth_code.code)
     return access_token
+
+@router.post("/activities")
+async def activities(access_token: Token):
+    activities = await get_activities(access_token.token)
+    return activities

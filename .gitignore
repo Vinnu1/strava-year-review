@@ -30,6 +30,7 @@ build/
 dist/
 wheels/
 *.egg-info
+sample_data.json
 
 # Virtual environments
 .venv
