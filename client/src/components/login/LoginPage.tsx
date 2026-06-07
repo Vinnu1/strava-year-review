@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import LoginButton from "./LoginButton";
+import TokenContext from "../../contexts/tokenContext";
 
 async function getAccessToken(code: string) {
   const response = await fetch("http://localhost:8000/authorize", {
@@ -20,6 +21,7 @@ async function getAccessToken(code: string) {
 }
 
 export default function LoginPage() {
+  const { setToken } = useContext(TokenContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   // const nav = () => {
@@ -30,6 +32,7 @@ export default function LoginPage() {
     if (code !== null) {
       getAccessToken(code).then((result) => {
         if (result) {
+          setToken(result);
           navigate("/");
         } else {
           // Ask user to log in again
