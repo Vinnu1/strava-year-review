@@ -1,9 +1,9 @@
-import httpx, os
+import httpx, os, json 
 from datetime import datetime
 
 base_url = "https://www.strava.com/api/v3"
 body = {
-    "after": int(datetime(2026,1,1,0,0,0).timestamp()),
+    # "after": int(datetime(2026,1,1,0,0,0).timestamp()),
     "per_page": 200,
     "page": 1
 }
@@ -19,6 +19,8 @@ async def get_activities(access_token):
         request = await client.get(f"{base_url}/athlete/activities", params=body, headers=headers)
         response = request.json()
         print(response)
+        with open("./tests/dump.json", "w") as f:
+            json.dump(response, f)
         return len(response)
     # Store activites and call next page
     # Maybe check if current page have 200 activity length,
