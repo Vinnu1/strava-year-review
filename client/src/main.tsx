@@ -2,12 +2,12 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { TokenProvider } from "./contexts/tokenContext.tsx";
+import { UserProvider } from "./contexts/userContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   //<StrictMode>
-  <TokenProvider>
+  <UserProvider>
     <App />
-  </TokenProvider>,
+  </UserProvider>,
   //</StrictMode>,
 );

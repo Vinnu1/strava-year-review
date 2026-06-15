@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import LoginButton from "./LoginButton";
-import TokenContext from "../../contexts/tokenContext";
+import TokenContext from "../../contexts/userContext";
 
 async function getAccessToken(code: string) {
   const response = await fetch("http://localhost:8000/authorize", {
