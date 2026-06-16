@@ -27,7 +27,7 @@ export default function ActivityCard({ title, data, datakey }: Activity) {
     <Card sx={{ maxWidth: 400, maxHeight: 400, margin: 5, flex: "1 1 400" }}>
       <CardHeader title={title} sx={{ textAlign: "center" }} />
       <Typography variant="h6" component="div" sx={{ textAlign: "center" }}>
-        Total {data.total} {datakey.x}!
+        {data.total ? `Total ${data.total} ${datakey.x}!` : null}
       </Typography>
       <CardContent sx={{ height: 280, width: 350 }}>
         {/* 
