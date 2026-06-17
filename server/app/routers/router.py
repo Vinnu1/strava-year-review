@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter,Request, Response
 from schemas.tokens import AuthCode, Token
 from services.authorize import get_access_token
 from services.activities import get_activities
@@ -11,13 +11,13 @@ def home():
     return {"msg":"Fastapi is working!"}
 
 @router.post("/authorize") #response_model=Token
-async def get_access(auth_code: AuthCode): #, response: Response
+async def get_access(auth_code: AuthCode, request: Request): # -> str , response: Response
     # print("auth code:", auth_code.code)
     # response.status_code = 201
-    access_token = await get_access_token(auth_code.code)
+    access_token = await get_access_token(auth_code.code, request)
     return access_token
 
 @router.post("/activities")
-async def activities(access_token: Token):
-    activities = await get_activities(access_token.token)
+async def activities(access_token: Token, request: Request):
+    activities = await get_activities(access_token.token, request)
     return activities

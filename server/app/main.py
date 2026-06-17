@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import core.config
+from core.lifespan import lifespan
 # from services.activities import get_activities
 from routers.router import router
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:3000"
