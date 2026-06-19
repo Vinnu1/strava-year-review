@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import LoginButton from "./LoginButton";
 import UserContext from "../../contexts/userContext";
 
-async function getAccessToken(code: string) {
+async function getUser(code: string) {
   const response = await fetch("http://localhost:8000/authorize", {
     method: "POST",
     body: JSON.stringify({ code: code }),
@@ -15,9 +15,9 @@ async function getAccessToken(code: string) {
     console.log("Error, please login again");
     return false;
   }
-  const accessToken = await response.json();
-  console.log(accessToken);
-  return accessToken;
+  const user = await response.json();
+  console.log("User:", user);
+  return user;
 }
 
 export default function LoginPage() {
@@ -29,10 +29,11 @@ export default function LoginPage() {
   // };
   useEffect(() => {
     const code = searchParams.get("code");
-    console.log(code);
+
     if (code !== null) {
-      getAccessToken(code).then((result) => {
+      getUser(code).then((result) => {
         if (result) {
+          setSearchParams("");
           // addUser(result);
           // navigate("/");
         } else {

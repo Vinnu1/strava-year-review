@@ -14,8 +14,8 @@ def home():
 async def get_access(auth_code: AuthCode, request: Request): # -> str , response: Response
     # print("auth code:", auth_code.code)
     # response.status_code = 201
-    access_token = await get_access_token(auth_code.code, request)
-    return access_token
+    athlete = await get_access_token(auth_code.code, request)
+    return athlete
 
 @router.post("/activities")
 async def activities(access_token: Token, request: Request):
