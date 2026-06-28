@@ -9,7 +9,7 @@ export default function LoginButton() {
       response_type: "code",
       redirect_uri: "http://localhost:3000/login",
       approval_prompt: "force",
-      scope: "read,activity:read,activity:read_all",
+      scope: "read,activity:read,activity:read_all,profile:read_all",
     });
     window.location.href = `${stravaAuthUri}?${params}`;
   };

@@ -11,10 +11,10 @@ def home():
     return {"msg":"Fastapi is working!"}
 
 @router.post("/authorize") #response_model=Token
-async def get_access(auth_code: AuthCode, request: Request): # -> str , response: Response
+async def get_access(auth_code: AuthCode, request: Request, response: Response): # -> str , 
     # print("auth code:", auth_code.code)
     # response.status_code = 201
-    athlete = await get_access_token(auth_code.code, request)
+    athlete = await get_access_token(auth_code.code, request, response)
     return athlete
 
 @router.post("/activities")

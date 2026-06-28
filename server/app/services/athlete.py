@@ -12,7 +12,7 @@ async def get_athlete(access_token: Token, request: Request):
         response = await client.get(url,headers=headers)
         athlete = response.json()
         print(athlete)
-        athlete["access_token"] = access_token
+        # athlete["access_token"] = access_token
     except Exception as exc:
         print(f'Something went wrong: {exc}')
         raise HTTPException(status_code=500, detail="Something went wrong.")

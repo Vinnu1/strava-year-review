@@ -10,6 +10,7 @@ async function getUser(code: string) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
   });
   if (!response.ok) {
     console.log("Error, please login again");

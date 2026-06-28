@@ -1,5 +1,5 @@
 import httpx, os
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Request, Response
 from schemas.tokens import AuthCode
 from services.athlete import get_athlete
 
@@ -15,6 +15,8 @@ from services.athlete import get_athlete
 
 client_id = os.environ["CLIENT_ID"]
 client_secret = os.environ["CLIENT_SECRET"]
+prod_env = True if os.environ["ENV"] == "PROD" else False
+# print('current env:',prod_env,'\n')
 
 oauth_url = "https://www.strava.com/oauth/token"
 
@@ -26,21 +28,34 @@ body = {
 }
 
 # Send request to strava, get and send back access token 
-async def get_access_token(auth_code: AuthCode, request: Request): #  -> str, return type of get_athlete should be used here.
+async def get_access_token(auth_code: AuthCode, request: Request, response: Response): #  -> str, return type of get_athlete should be used here.
     body["code"] = auth_code
     # print(body)
     client = request.app.state.client
     #async with httpx.AsyncClient() as client:
     try:
-        response = await client.post(oauth_url,json=body, timeout=10)
-        response.raise_for_status()
-        token = response.json().get('access_token')
-        print('Access token generated:', response.json())
-        return 0
+        oauth_response = await client.post(oauth_url,json=body, timeout=10)
+        oauth_response.raise_for_status()
+        data = oauth_response.json()
+        token = data.get('access_token')
+        token_expiry = data.get('expires_in')
+        # print('Access token generated:', oauth_response.json())
+
+        # set auth token in browser cookie
+        response.set_cookie(
+            key="strava-access-token",
+            value=token,
+            httponly=True, # JavaScript can't access cookie
+            secure=prod_env, # Send over HTTPS, true for production, false for development i.e. localhost
+            samesite="lax", # default, for CSRF
+            max_age=token_expiry # expiry time in seconds
+        )
+
+        
     except httpx.TimeoutException:
         raise HTTPException(status_code=504, detail="Strava API request timed out")
     except httpx.HTTPStatusError:
-        if(response.status_code == 400):
+        if(oauth_response.status_code == 400):
             raise HTTPException(status_code=400, detail="Strava API Bad request")
     if token is None:
         raise HTTPException(status_code=502, detail="Strava API didn't provide access_token")
