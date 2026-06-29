@@ -1,5 +1,6 @@
 from fastapi import APIRouter,Request, Response
 from schemas.tokens import AuthCode, Token
+from schemas.athlete import Athlete
 from services.authorize import get_access_token
 from services.activities import get_activities
 
@@ -10,7 +11,7 @@ def home():
     # get activities
     return {"msg":"Fastapi is working!"}
 
-@router.post("/authorize") #response_model=Token
+@router.post("/authorize", response_model=Athlete) 
 async def get_access(auth_code: AuthCode, request: Request, response: Response): # -> str , 
     # print("auth code:", auth_code.code)
     # response.status_code = 201
@@ -19,5 +20,7 @@ async def get_access(auth_code: AuthCode, request: Request, response: Response):
 
 @router.post("/activities")
 async def activities(access_token: Token, request: Request):
+    # remove token from params and get it from request
+    
     activities = await get_activities(access_token.token, request)
     return activities
