@@ -21,7 +21,7 @@ type Props = {
 
 // use JWT to set token in cookie
 export function UserProvider({ children }: Props) {
-  const [user, setUser] = useState<User | null>({ username: "Vinayak" });
+  const [user, setUser] = useState<User | null>(null);
 
   // define specific object type later
   const addUser = (userDetails: User) => {

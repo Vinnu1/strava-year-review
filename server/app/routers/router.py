@@ -11,7 +11,7 @@ def home():
     # get activities
     return {"msg":"Fastapi is working!"}
 
-@router.post("/authorize", response_model=Athlete) 
+@router.post("/authorize") # , response_model=Athlete 
 async def get_access(auth_code: AuthCode, request: Request, response: Response): # -> str , 
     # print("auth code:", auth_code.code)
     # response.status_code = 201

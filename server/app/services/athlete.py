@@ -11,7 +11,7 @@ async def get_athlete(access_token: Token, request: Request):
     try:
         response = await client.get(url,headers=headers)
         athlete = response.json()
-        print(athlete)
+        print("athlete details:", athlete)
         # athlete["access_token"] = access_token
     except Exception as exc:
         print(f'Something went wrong: {exc}')

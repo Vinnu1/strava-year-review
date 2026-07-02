@@ -51,6 +51,7 @@ async def get_access_token(auth_code: AuthCode, request: Request, response: Resp
             max_age=token_expiry # expiry time in seconds
         )
 
+        # return 0
         
     except httpx.TimeoutException:
         raise HTTPException(status_code=504, detail="Strava API request timed out")
