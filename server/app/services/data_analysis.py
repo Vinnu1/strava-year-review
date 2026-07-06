@@ -6,7 +6,7 @@ with open('../../tests/dump.json', 'r') as file:
     data = json.load(file)
 
 df = pd.DataFrame(data)
-# print(df.iloc[0])
+#print(df.iloc[0])
 
 # walk_km = df.loc[df["type"] == "Walk", "distance"].sum()/1000
 # run_km = df.loc[df["type"] == "Run", "distance"].sum()/1000
@@ -26,20 +26,23 @@ df = pd.DataFrame(data)
 df['start_date'] = pd.to_datetime(df['start_date'], format='%Y-%m-%dT%H:%M:%SZ').dt.normalize()
 df['month'] = df['start_date'].dt.month_name()
 
-total_days = df['start_date'].nunique()
+# total_days = df['start_date'].nunique()
 
 # For duplicate days
 # duplicate_dates = df[df['start_date'].duplicated(keep=False)] #.count() #.nunique()
 # print(len(duplicate_dates))
 
 # Can also use df.drop_duplicates(subset='start_date') below
-unique_date_rows =  df[~df['start_date'].duplicated(keep='first')]  
-months_by_days = unique_date_rows['month'].value_counts() 
+# unique_date_rows =  df[~df['start_date'].duplicated(keep='first')]  
+# days_by_months = unique_date_rows['month'].value_counts() 
 month_names = list(calendar.month_name)[1:] # Remove first index as its an empty string
-months_by_days = months_by_days.reindex(month_names, fill_value=0).sort_values(ascending=False)
-print(months_by_days)
+# days_by_months = days_by_months.reindex(month_names, fill_value=0).sort_values(ascending=False)
+# print(days_by_months)
 
 
-# Total time spent, by months
-# total_time = df['start_date'].dt.month_name()
-# print(total_time)
+# Total time spent, time spent by months
+#total_time = df['elapsed_time'].sum()/3600 # secs to hours
+#print(total_time)
+#time_by_months = df.groupby('month')['elapsed_time'].sum()/3600
+#time_by_months = time_by_months.reindex(month_names, fill_value=0).sort_values(ascending=False)
+#print(time_by_months)
