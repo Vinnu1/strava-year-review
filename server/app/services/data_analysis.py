@@ -33,7 +33,7 @@ df['month'] = df['start_date'].dt.month_name()
 # print(len(duplicate_dates))
 
 # Can also use df.drop_duplicates(subset='start_date') below
-# unique_date_rows =  df[~df['start_date'].duplicated(keep='first')]  
+unique_date_rows =  df[~df['start_date'].duplicated(keep='first')]  
 # days_by_months = unique_date_rows['month'].value_counts() 
 month_names = list(calendar.month_name)[1:] # Remove first index as its an empty string
 # days_by_months = days_by_months.reindex(month_names, fill_value=0).sort_values(ascending=False)
@@ -46,3 +46,12 @@ month_names = list(calendar.month_name)[1:] # Remove first index as its an empty
 #time_by_months = df.groupby('month')['elapsed_time'].sum()/3600
 #time_by_months = time_by_months.reindex(month_names, fill_value=0).sort_values(ascending=False)
 #print(time_by_months)
+
+# Longest streak in days
+consecutive_dates = unique_date_rows['start_date'].sort_values().reset_index(drop=True)
+
+day_difference = consecutive_dates - pd.to_timedelta(consecutive_dates.index, unit='D')
+
+streak_lengths = day_difference.value_counts()  #.groupby(day_difference).transform('size')
+
+max_streak = streak_lengths.max()
