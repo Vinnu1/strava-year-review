@@ -2,10 +2,12 @@ import httpx, os, json
 from datetime import datetime
 from schemas.tokens import Token
 from fastapi import Request
+from services.data_analysis import data_analysis
 
 base_url = "https://www.strava.com/api/v3"
 body = {
-    # "after": int(datetime(2026,1,1,0,0,0).timestamp()),
+    "after": int(datetime(2026,1,1,0,0,0).timestamp()), # After 2026
+    # "before": int(datetime(2027,1,1,0,0,0)), - Apply before if needed for activities before this timestamp
     "per_page": 200,
     "page": 1
 }
@@ -13,7 +15,7 @@ body = {
 
 # Create request to get activities
 async def get_activities(access_token: Token, request: Request): # add return type later
-    print('token', access_token)
+    # print('token', access_token)
     headers= {
     'Authorization': f'Bearer {access_token}'
     }
@@ -21,10 +23,11 @@ async def get_activities(access_token: Token, request: Request): # add return ty
     # async with httpx.AsyncClient() as client:
     request = await client.get(f"{base_url}/athlete/activities", params=body, headers=headers)
     response = request.json()
-    print(response)
-    with open("./tests/dump.json", "w") as f:
-        json.dump(response, f)
-    return len(response)
+    #print(response)
+    #with open("./tests/dump.json", "w") as f:
+    #    json.dump(response, f)
+    analysis_results = data_analysis(response)
+    return analysis_results
     # Store activites and call next page
     # Maybe check if current page have 200 activity length,
     # if yes then call next page and check length
