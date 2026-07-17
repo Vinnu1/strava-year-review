@@ -1,6 +1,7 @@
 from fastapi import APIRouter,Request, Response
 from schemas.tokens import AuthCode, Token
 from schemas.athlete import Athlete
+from schemas.year import Year
 from services.authorize import get_access_token
 from services.activities import get_activities
 
@@ -19,8 +20,10 @@ async def get_access(auth_code: AuthCode, request: Request, response: Response):
     return athlete
 
 @router.post("/activities")
-async def activities(access_token: Token, request: Request):
+async def activities(year: Year, request: Request):
     # remove token from params and get it from request
-    
-    activities = await get_activities(access_token.token, request)
+    access_token = request.cookies['strava-access-token']
+    activities = await get_activities(year.year, access_token, request)
     return activities
+
+    

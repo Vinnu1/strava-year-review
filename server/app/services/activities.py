@@ -1,27 +1,28 @@
 import httpx, os, json 
 from datetime import datetime
 from schemas.tokens import Token
+from schemas.year import Year
 from fastapi import Request
 from services.data_analysis import data_analysis
 
-base_url = "https://www.strava.com/api/v3"
-body = {
-    "after": int(datetime(2026,1,1,0,0,0).timestamp()), # After 2026
-    # "before": int(datetime(2027,1,1,0,0,0)), - Apply before if needed for activities before this timestamp
-    "per_page": 200,
-    "page": 1
-}
+strava_api_uri = "https://www.strava.com/api/v3"
 # access_token = os.environ["ACCESS_TOKEN"]
 
 # Create request to get activities
-async def get_activities(access_token: Token, request: Request): # add return type later
+async def get_activities(year: Year, access_token: Token, request: Request): # add return type later
     # print('token', access_token)
+    body = {
+    "after": int(datetime(year,1,1,0,0,0).timestamp()), # After 2026
+    "before": int(datetime(year + 1,1,1,0,0,0).timestamp()), # - Apply before if needed for activities before this timestamp
+    "per_page": 200,
+    "page": 1
+    }
     headers= {
     'Authorization': f'Bearer {access_token}'
     }
     client = request.app.state.client
     # async with httpx.AsyncClient() as client:
-    request = await client.get(f"{base_url}/athlete/activities", params=body, headers=headers)
+    request = await client.get(f"{strava_api_uri}/athlete/activities", params=body, headers=headers)
     response = request.json()
     #print(response)
     #with open("./tests/dump.json", "w") as f:

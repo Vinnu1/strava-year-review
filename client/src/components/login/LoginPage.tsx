@@ -18,6 +18,20 @@ async function getUser(code: string) {
   }
   const user = await response.json();
   console.log("User:", user);
+  //
+  let res = await fetch("http://localhost:8000/activities", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      year: 2025,
+    }),
+  });
+  res = await res.json();
+  console.log(res);
+  //
   return user;
 }
 
